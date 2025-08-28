@@ -1,0 +1,126 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-08-25T06:13:00Z",
+    "analyzer_version": "1.0.0",
+    "total_logs_analyzed": 3,
+    "total_log_entries": 70
+  },
+  "performance_summary": {
+    "overall_status": "CRITICAL",
+    "critical_issues": 3,
+    "warnings": 2,
+    "passing_metrics": 1
+  },
+  "key_metrics": {
+    "requests": {
+      "total": 44,
+      "errors": 13,
+      "error_rate_percent": 29.55,
+      "throughput_rps": 0.73,
+      "total_bytes_served": 36160
+    },
+    "latency_ms": {
+      "p50": 150,
+      "p90": 1500,
+      "p95": 1800,
+      "p99": 2000,
+      "targets": {
+        "p95_target": 500,
+        "p99_target": 1000
+      }
+    },
+    "system_resources": {
+      "cpu_utilization_percent": 83.23,
+      "memory_utilization_percent": 84.59,
+      "load_average": 8.11,
+      "targets": {
+        "cpu_target": 80,
+        "memory_target": 85,
+        "load_target": 1.0
+      }
+    }
+  },
+  "nfr_compliance": {
+    "latency": {
+      "requirement": "p95 <= 500 ms; p99 <= 1000 ms",
+      "current": "p95=1800 ms; p99=2000 ms",
+      "status": "FAILING",
+      "severity": "CRITICAL"
+    },
+    "reliability": {
+      "requirement": "Error rate <= 1.00%",
+      "current": "Error rate 29.55%",
+      "status": "FAILING",
+      "severity": "CRITICAL"
+    },
+    "throughput": {
+      "requirement": "Sustain >= 1 RPS with SLO latency",
+      "current": "0.73 RPS observed",
+      "status": "PARTIALLY_FAILING",
+      "severity": "WARNING"
+    },
+    "capacity": {
+      "cpu": {
+        "requirement": "Avg CPU <= 80%",
+        "current": "Avg CPU 83%",
+        "status": "AT_RISK",
+        "severity": "WARNING"
+      },
+      "memory": {
+        "requirement": "Avg Memory <= 85%",
+        "current": "Avg Memory 85%",
+        "status": "AT_RISK",
+        "severity": "WARNING"
+      }
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "IMMEDIATE",
+      "category": "Infrastructure",
+      "action": "Scale infrastructure - add CPU capacity and memory",
+      "timeline": "24-48 hours"
+    },
+    {
+      "priority": "IMMEDIATE",
+      "category": "Error Handling",
+      "action": "Investigate 13 errors and implement retry mechanisms",
+      "timeline": "24-48 hours"
+    },
+    {
+      "priority": "SHORT_TERM",
+      "category": "Performance",
+      "action": "Implement caching and optimize database queries",
+      "timeline": "1-2 weeks"
+    },
+    {
+      "priority": "SHORT_TERM",
+      "category": "Load Management",
+      "action": "Add rate limiting and load balancing",
+      "timeline": "1-2 weeks"
+    },
+    {
+      "priority": "LONG_TERM",
+      "category": "Architecture",
+      "action": "Consider microservices and horizontal scaling",
+      "timeline": "1-3 months"
+    }
+  ],
+  "target_goals": {
+    "latency": {
+      "p95_target_ms": 500,
+      "p99_target_ms": 1000
+    },
+    "reliability": {
+      "error_rate_target_percent": 1.0
+    },
+    "capacity": {
+      "cpu_target_percent": 80,
+      "memory_target_percent": 85,
+      "load_target": 1.0
+    },
+    "throughput": {
+      "target_rps": 10
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "localhost",
+    "environment": "development",
+    "logLevel": "info",
+    "adminUser": "admin",
+    "adminPass": "admin123"
+  },
+  "security": {
+    "enableHelmet": true,
+    "enableRateLimit": true,
+    "rateLimitWindow": 900000,
+    "rateLimitMax": 1000,
+    "enableCors": true,
+    "corsOrigins": ["*"]
+  },
+  "otel": {
+    "enabled": true,
+    "serviceName": "production-log-analyzer",
+    "serviceVersion": "2.0.0",
+    "jaegerEndpoint": "http://localhost:14268/api/traces",
+    "prometheusPort": 9464,
+    "enableAutoInstrumentation": true
+  },
+  "transport": {
+    "http": {
+      "enabled": true,
+      "port": 8080,
+      "maxPayloadSize": "50mb",
+      "timeout": 30000
+    },
+    "syslog": {
+      "enabled": true,
+      "port": 514,
+      "protocol": "udp"
+    },
+    "kafka": {
+      "enabled": false,
+      "brokers": ["localhost:9092"],
+      "topics": ["logs", "metrics", "traces"],
+      "groupId": "log-analyzer"
+    },
+    "redis": {
+      "enabled": false,
+      "host": "localhost",
+      "port": 6379,
+      "streams": ["logs:stream", "metrics:stream", "traces:stream"]
+    }
+  },
+  "enrichment": {
+    "timezone": "UTC",
+    "enablePiiDetection": true,
+    "piiRedactionMode": "hash",
+    "enableGeoEnrichment": true,
+    "enableUserSessionEnrichment": true,
+    "customGrokPatterns": {}
+  },
+  "storage": {
+    "tiers": {
+      "hot": {
+        "enabled": true,
+        "type": "elasticsearch",
+        "retention": "7d",
+        "elasticsearch": {
+          "node": "http://localhost:9200",
+          "index": "logs-hot",
+          "maxRetries": 3,
+          "requestTimeout": 30000
+        }
+      },
+      "warm": {
+        "enabled": false,
+        "type": "clickhouse",
+        "retention": "30d",
+        "clickhouse": {
+          "host": "localhost",
+          "port": 8123,
+          "database": "logs",
+          "table": "logs_warm"
+        }
+      },
+      "cold": {
+        "enabled": false,
+        "type": "s3",
+        "retention": "365d",
+        "s3": {
+          "bucket": "logs-cold-storage",
+          "region": "us-east-1"
+        }
+      }
+    },
+    "cache": {
+      "enabled": true,
+      "type": "redis",
+      "ttl": 3600,
+      "redis": {
+        "host": "localhost",
+        "port": 6379,
+        "db": 0
+      }
+    }
+  },
+  "query": {
+    "maxResults": 10000,
+    "defaultTimeRange": "24h",
+    "enableRegex": true,
+    "enableSql": true,
+    "cacheResults": true,
+    "cacheTtl": 300
+  },
+  "anomalyDetection": {
+    "windowSize": 100,
+    "sensitivity": 0.95,
+    "minSamples": 10,
+    "algorithms": {
+      "statistical": true,
+      "clustering": true,
+      "timeSeries": true,
+      "logPatterns": true
+    },
+    "thresholds": {
+      "errorRate": 0.05,
+      "latencyP95": 1000,
+      "throughputDrop": 0.3
+    }
+  },
+  "serviceTopology": {
+    "maxNodes": 1000,
+    "maxEdges": 5000,
+    "correlationWindow": 300000,
+    "minCorrelationStrength": 0.3,
+    "enableAutoDiscovery": true
+  },
+  "alerting": {
+    "maxActiveAlerts": 1000,
+    "dedupWindow": 300000,
+    "groupingWindow": 600000,
+    "escalationLevels": ["info", "warning", "critical"],
+    "sloDefaults": {
+      "errorBudget": 0.001,
+      "burnRateThreshold": 2.0
+    },
+    "notifications": {
+      "email": {
+        "enabled": false,
+        "smtp": {
+          "host": "",
+          "port": 587,
+          "secure": false,
+          "auth": {
+            "user": "",
+            "pass": ""
+          }
+        }
+      },
+      "slack": {
+        "enabled": false,
+        "webhookUrl": "",
+        "channel": "#alerts"
+      },
+      "webhook": {
+        "enabled": false,
+        "url": "",
+        "headers": {}
+      }
+    }
+  },
+  "integrations": {
+    "grafana": {
+      "enabled": false,
+      "url": "",
+      "apiKey": ""
+    },
+    "serviceNow": {
+      "enabled": false,
+      "instance": "",
+      "username": "",
+      "password": ""
+    },
+    "jira": {
+      "enabled": false,
+      "url": "",
+      "username": "",
+      "apiToken": ""
+    }
+  }
+}

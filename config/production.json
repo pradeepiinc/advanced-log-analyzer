@@ -1,0 +1,42 @@
+{
+  "server": {
+    "environment": "production",
+    "logLevel": "warn"
+  },
+  "security": {
+    "corsOrigins": []
+  },
+  "storage": {
+    "tiers": {
+      "warm": {
+        "enabled": true
+      },
+      "cold": {
+        "enabled": true
+      }
+    }
+  },
+  "transport": {
+    "kafka": {
+      "enabled": true
+    },
+    "redis": {
+      "enabled": true
+    }
+  },
+  "alerting": {
+    "notifications": {
+      "email": {
+        "enabled": true
+      },
+      "slack": {
+        "enabled": true
+      }
+    }
+  },
+  "integrations": {
+    "grafana": {
+      "enabled": true
+    }
+  }
+}

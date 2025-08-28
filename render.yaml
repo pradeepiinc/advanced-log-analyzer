@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: production-log-analyzer
+    env: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASS
+        generateValue: true
+      - key: LOG_LEVEL
+        value: info
+      - key: ELASTICSEARCH_URL
+        value: http://elasticsearch:9200
+      - key: REDIS_HOST
+        value: redis
+      - key: REDIS_PORT
+        value: 6379
+    
+  - type: redis
+    name: redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+  - type: web
+    name: elasticsearch
+    env: docker
+    plan: free
+    dockerfilePath: ./docker/Dockerfile.elasticsearch
+    healthCheckPath: /_cluster/health
+    envVars:
+      - key: discovery.type
+        value: single-node
+      - key: xpack.security.enabled
+        value: false
+      - key: ES_JAVA_OPTS
+        value: "-Xms512m -Xmx512m"

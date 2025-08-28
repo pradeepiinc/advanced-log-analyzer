@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "name": "production-log-analyzer",
+  "builds": [
+    {
+      "src": "start.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/start.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/start.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "SESSION_SECRET": "@session-secret",
+    "ADMIN_USER": "admin",
+    "ADMIN_PASS": "@admin-password",
+    "LOG_LEVEL": "info"
+  },
+  "functions": {
+    "start.js": {
+      "maxDuration": 30
+    }
+  }
+}
